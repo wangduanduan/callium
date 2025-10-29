@@ -1,4 +1,4 @@
-package logger
+package core
 
 import (
 	"os"
@@ -8,11 +8,11 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-var L *zap.SugaredLogger
+var Log *zap.SugaredLogger
 
-func NewLogger() (*zap.SugaredLogger, error) {
+func InitLogger(level string) (*zap.SugaredLogger, error) {
 
-	logLevel, err := zapcore.ParseLevel(config.Conf.LogLevel)
+	logLevel, err := zapcore.ParseLevel(level)
 
 	if err != nil {
 		panic(err)
@@ -38,9 +38,7 @@ func NewLogger() (*zap.SugaredLogger, error) {
 		consoleCore,
 	)
 
-	return zap.New(core, zap.AddCaller()).Sugar(), nil
-}
+	Log = zap.New(core, zap.AddCaller()).Sugar()
 
-func init() {
-	L, _ = NewLogger()
+	return Log, nil
 }
