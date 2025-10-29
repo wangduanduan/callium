@@ -1,3 +1,8 @@
+# callium
+
+**write opensips.cfg like a real script**
+
+```go
 package main
 
 import (
@@ -58,3 +63,4 @@ func main() {
 func relay(c *core.Ctx) {
 
 }
+```
