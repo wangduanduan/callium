@@ -37,16 +37,24 @@ func main() {
 				c.SendReply(404, "Not here")
 				return
 			}
+
+			relay(c)
+			return
 		}
 
-		if c.GetMethod() == "INVITE" {
-			c.OnReply(func(c *core.Ctx) {
-				c.Drop()
-			})
+		if c.GetMethod() == "CANCEL" {
+			if c.CheckTrans() {
+				c.TRelay()
+			}
+			return
+		}
 
-			c.OnFailure(func(c *core.Ctx) {
-				c.Drop()
-			})
+		c.CheckTrans()
+
+		if c.GetMethod() != "REGISTER" {
+			fd := c.Var("fd").(core.FD)
+			c.TRelay()
+			return
 		}
 
 		c.SlSendReply(404, "Not Found")
@@ -56,5 +64,5 @@ func main() {
 }
 
 func relay(c *core.Ctx) {
-
+	c.Infof("enter relay")
 }

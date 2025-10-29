@@ -40,6 +40,10 @@ func (c *Ctx) MaxForwards() int {
 	return 70
 }
 
+func (c *Ctx) GetHeader(h string) int {
+	return 70
+}
+
 func (c *Ctx) OnReply(r EventListener) string {
 	c.events["OnReply"] = r
 	return "reply"
