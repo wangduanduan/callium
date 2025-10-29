@@ -64,3 +64,10 @@ func relay(c *core.Ctx) {
 
 }
 ```
+
+
+Inspired by:
+- [opensips](https://github.com/OpenSIPS/opensips)
+- [kamailio](https://github.com/kamailio/kamailio)
+- [gosip](https://github.com/ghettovoice/gosip)
+- [sipgo](https://github.com/emiago/sipgo)
