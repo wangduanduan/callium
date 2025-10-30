@@ -3,3 +3,6 @@ fast-commit:
 	git add -A
 	git commit -m "wip"
 	git push origin master
+
+test:
+	go test -v ./...

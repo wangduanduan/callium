@@ -6,7 +6,7 @@ import (
 
 func main() {
 
-	app := core.New(core.Config{
+	app := core.New(&core.Config{
 		Alias:     []string{"opensips.org", "sip-router.org"},
 		LogLevel:  "DEBUG",
 		UDPWorker: 4,
@@ -52,7 +52,6 @@ func main() {
 		c.CheckTrans()
 
 		if c.GetMethod() != "REGISTER" {
-			fd := c.Var("fd").(core.FD)
 			c.TRelay()
 			return
 		}
