@@ -14,7 +14,7 @@ func TestSomething(t *testing.T) {
 	assert.Equal(t, l0[0], []byte("a"))
 	assert.Equal(t, l0[1], []byte("b"))
 
-	l0, l1, err = base_parser0([]byte("a\r\nb\r\nc"))
+	l0, l1, err = base_parser0([]byte("a\r\nb\r\nc\r\n"))
 	assert.Nil(t, l0)
 	assert.Nil(t, l1)
 	assert.Error(t, err)
