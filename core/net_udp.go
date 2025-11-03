@@ -10,6 +10,7 @@ import (
 type UdpServer struct {
 	conn *net.UDPConn
 	port int
+	ip   string
 	*zap.SugaredLogger
 	maxPacketLength       int
 	minPacketLength       int
@@ -24,7 +25,7 @@ type Packet struct {
 
 func (u *UdpServer) Serve() {
 	var err error
-	u.conn, err = net.ListenUDP("udp", &net.UDPAddr{Port: u.port})
+	u.conn, err = net.ListenUDP("udp", &net.UDPAddr{IP: net.ParseIP(u.ip), Port: u.port})
 
 	if err != nil {
 		u.Fatalf("Udp Service listen report udp fail:%v", err)

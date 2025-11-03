@@ -15,7 +15,7 @@ func (c *Ctx) Drop() {
 	c.Infoln("Drop")
 }
 
-func (c *Ctx) GetMethod() string {
+func (c *Ctx) Method() string {
 	return "GET"
 }
 
@@ -51,8 +51,17 @@ func (c *Ctx) DeleteHeader(h string, index int) int {
 func (c *Ctx) GetVar(k string) string {
 	return "abc"
 }
+
 func (c *Ctx) SetVar(k, v string) {
 
+}
+
+func (c *Ctx) IsReq() bool {
+	return false
+}
+
+func (c *Ctx) IsRes() bool {
+	return false
 }
 
 func (c *Ctx) OnReply(r EventListener) string {

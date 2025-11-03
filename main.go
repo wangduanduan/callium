@@ -6,12 +6,19 @@ import (
 
 func main() {
 
-	app := core.New(core.Config{
-		Alias:     []string{"opensips.org", "sip-router.org"},
+	app := core.New(&core.Config{
+		Alias: []string{
+			"opensips.org",
+			"sip-router.org",
+		},
 		LogLevel:  "DEBUG",
 		UDPWorker: 4,
 		TCPWorker: 4,
-		Sockets:   []string{"udp:127.0.0.1:5060"},
+		Sockets: []string{
+			"udp:127.0.0.1:5060",
+			"udp:127.0.0.1:5080",
+			"udp:127.0.0.1:8090",
+		},
 	})
 
 	app.OnRequest(func(c *core.Ctx) {
@@ -20,13 +27,18 @@ func main() {
 			return
 		}
 
-		if c.GetMethod() == "PUBLISH" || c.GetMethod() == "SUBSCRIBE" {
+		if c.Method() == "OPTIONS" {
+			c.SlSendReply(200, "Ok")
+			return
+		}
+
+		if c.Method() == "PUBLISH" || c.Method() == "SUBSCRIBE" {
 			c.SlSendReply(503, "Service Unavailable")
 			return
 		}
 
 		if c.HasToTag() {
-			if c.GetMethod() == "ACK" && c.CheckTrans() {
+			if c.Method() == "ACK" && c.CheckTrans() {
 				c.TRelay()
 				return
 			}
@@ -42,7 +54,7 @@ func main() {
 			return
 		}
 
-		if c.GetMethod() == "CANCEL" {
+		if c.Method() == "CANCEL" {
 			if c.CheckTrans() {
 				c.TRelay()
 			}
@@ -51,7 +63,7 @@ func main() {
 
 		c.CheckTrans()
 
-		if c.GetMethod() != "REGISTER" {
+		if c.Method() != "REGISTER" {
 			fd := c.GetVar("$fd")
 			c.Infow("fd is", fd)
 			c.TRelay()
@@ -59,6 +71,14 @@ func main() {
 		}
 
 		c.SlSendReply(404, "Not Found")
+	})
+
+	app.OnError(func(c *core.Ctx) {
+		c.Errorw("error", c)
+	})
+
+	app.OnStarted(func(c *core.Ctx) {
+		c.Infow("started")
 	})
 
 	app.Start()

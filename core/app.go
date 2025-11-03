@@ -1,7 +1,8 @@
 package core
 
 import (
-	"fmt"
+	"strconv"
+	"strings"
 
 	"go.uber.org/zap"
 )
@@ -10,15 +11,64 @@ type App struct {
 	events map[string]EventListener
 	Config *Config
 	*zap.SugaredLogger
+	sink0 chan *Packet
 }
 
 func (app *App) Start() {
-	fmt.Println("Start")
+
+	for _, s := range app.Config.Sockets {
+		go app.listen(s)
+	}
+
+	for p := range app.sink0 {
+		app.Infof("from %s read %v", p.remoteAddr, p.data)
+	}
+}
+
+func (app *App) listen(socket string) {
+	sm := strings.SplitN(socket, ":", 3)
+
+	if len(sm) != 3 {
+		app.Fatalw("Invalid socket format", socket)
+		return
+	}
+
+	port, err := strconv.Atoi(sm[2])
+	if err != nil {
+		app.Fatalw("Invalid port number", "port", sm[2], "error", err)
+		return
+	}
+
+	switch sm[0] {
+	case "udp":
+		s := UdpServer{
+			port:                  port,
+			ip:                    sm[1],
+			SugaredLogger:         app.SugaredLogger,
+			maxPacketLength:       app.Config.maxPacketLength,
+			minPacketLength:       app.Config.minPacketLength,
+			maxReadTimeoutSeconds: app.Config.maxReadTimeoutSeconds,
+			output:                app.sink0,
+		}
+		go s.Serve()
+		return
+	default:
+		app.Fatalw("unsupport socket protocol", sm[0])
+		return
+	}
+
 }
 
 func (app *App) OnRequest(r EventListener) {
-	fmt.Println("Stop")
 	app.events["OnRequest"] = r
+}
+
+func (app *App) OnError(r EventListener) {
+	app.events["OnError"] = r
+}
+
+func (app *App) OnStarted(r EventListener) {
+	app.events["OnStarted"] = r
 }
 
 func rewriteWithDefaults(c *Config) {
@@ -76,6 +126,7 @@ func New(c *Config) *App {
 		events:        make(map[string]EventListener),
 		Config:        c,
 		SugaredLogger: Log,
+		sink0:         make(chan *Packet, 100),
 	}
 
 	return app
