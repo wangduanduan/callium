@@ -52,7 +52,8 @@ func main() {
 		c.CheckTrans()
 
 		if c.GetMethod() != "REGISTER" {
-			fd := c.Var("fd").(core.FD)
+			fd := c.GetVar("$fd")
+			c.Infow("fd is", fd)
 			c.TRelay()
 			return
 		}

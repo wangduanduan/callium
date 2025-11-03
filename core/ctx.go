@@ -40,8 +40,19 @@ func (c *Ctx) MaxForwards() int {
 	return 70
 }
 
-func (c *Ctx) GetHeader(h string) int {
+func (c *Ctx) GetHeader(h string, index int) int {
 	return 70
+}
+
+func (c *Ctx) DeleteHeader(h string, index int) int {
+	return 70
+}
+
+func (c *Ctx) GetVar(k string) string {
+	return "abc"
+}
+func (c *Ctx) SetVar(k, v string) {
+
 }
 
 func (c *Ctx) OnReply(r EventListener) string {
