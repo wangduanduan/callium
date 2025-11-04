@@ -60,7 +60,74 @@ const (
 	HDR_WWW_AUTHENTICATE          // WWW-Authenticate ,
 )
 
-var hdr_types = map[string]int{
+var hdrType2Name = map[int]string{
+	HDR_ACCEPT:             "Accept",
+	HDR_ACCEPTDISPOSITION:  "Accept-Disposition",
+	HDR_ACCEPTLANGUAGE:     "Accept-Language",
+	HDR_ALLOW:              "Allow",
+	HDR_AUTHORIZATION:      "Authorization",
+	HDR_BYTE_RANGE:         "MSRP Byte-Range",
+	HDR_CALLID:             "Call-Id",
+	HDR_CALL_INFO:          "Call-Info",
+	HDR_CONTACT:            "Contact",
+	HDR_CONTENTDISPOSITION: "Content-Disposition",
+	HDR_CONTENTENCODING:    "Content-Encoding",
+	HDR_CONTENTLENGTH:      "Content-Length",
+	HDR_CONTENTTYPE:        "Content-Type",
+	HDR_CSEQ:               "CSeq",
+	HDR_DIVERSION:          "Diversion",
+	HDR_EOH:                "Some other",
+	HDR_EVENT:              "Event",
+	HDR_EXPIRES:            "Expires",
+	HDR_FAILURE_REPORT:     "MSRP Failure-Report",
+	HDR_FEATURE_CAPS:       "Feature-Caps",
+	HDR_FROM:               "From",
+	HDR_FROM_PATH:          "MSRP From-Path",
+	HDR_MAXFORWARDS:        "MaxForwards",
+	HDR_MESSAGE_ID:         "MSRP Message-ID",
+	HDR_MIN_EXPIRES:        "Min-Expires",
+	HDR_MIN_SE:             "Min-SE",
+	HDR_ORGANIZATION:       "Organization",
+	HDR_OTHER:              "Some other",
+	HDR_PAI:                "P-Asserted-Identity",
+	HDR_PATH:               "Path",
+	HDR_PPI:                "P-Preferred-Identity",
+	HDR_PRIORITY:           "Priority",
+	HDR_PRIVACY:            "Privacy",
+	HDR_PROXYAUTH:          "Proxy-Authorization",
+	HDR_PROXYREQUIRE:       "Proxy-Require",
+	HDR_PROXY_AUTHENTICATE: "Proxy-Authenticate",
+	HDR_RECORDROUTE:        "Record-Route",
+	HDR_REFER_TO:           "Refer-To",
+	HDR_REPLACES:           "Replaces",
+	HDR_RETRY_AFTER:        "Retry-After",
+	HDR_ROUTE:              "Route",
+	HDR_RPID:               "Remote-Party-ID",
+	HDR_SECURITY_CLIENT:    "sec-agree RFC3329 Security-Client",
+	HDR_SECURITY_SERVER:    "sec-agree RFC3329 Security-Server",
+	HDR_SECURITY_VERIFY:    "sec-agree RFC3329 Security-Verify",
+	HDR_SESSION_EXPIRES:    "Session-Expires",
+	HDR_STATUS:             "MSRP Status",
+	HDR_SUBJECT:            "Subject",
+	HDR_SUCCESS_REPORT:     "MSRP Success-Report",
+	HDR_SUPPORTED:          "Supported",
+	HDR_USERAGENT:          "User-Agent",
+	HDR_USE_PATH:           "MSRP Use-Path",
+	HDR_VIA:                "Via",
+	HDR_WWW_AUTHENTICATE:   "WWW-Authenticate",
+}
+
+var hdrType2ShortName = map[int]string{
+	HDR_FROM:          "F",
+	HDR_CALLID:        "I",
+	HDR_SUPPORTED:     "K",
+	HDR_CONTENTLENGTH: "L",
+	HDR_CONTACT:       "M",
+	HDR_SUBJECT:       "S",
+	HDR_VIA:           "V",
+}
+
+var hdrName2Type = map[string]int{
 	"Accept-Disposition":   HDR_ACCEPTDISPOSITION,
 	"accept-disposition":   HDR_ACCEPTDISPOSITION,
 	"Accept-Language":      HDR_ACCEPTLANGUAGE,
@@ -186,5 +253,5 @@ var hdr_types = map[string]int{
 }
 
 func GetHeaderType(hdr []byte) int {
-	return hdr_types[string(hdr)]
+	return hdrName2Type[string(hdr)]
 }
