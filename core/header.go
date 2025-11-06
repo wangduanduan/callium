@@ -1,6 +1,57 @@
 package core
 
 const (
+	SM_INVITE = iota
+	SM_ACK
+	SM_CANCEL
+	SM_BYE
+	SM_REGISTER
+	SM_OPTIONS
+	SM_SUBSCRIBE
+	SM_NOTIFY
+	SM_REFER
+	SM_INFO
+	SM_MESSAGE
+	SM_PRACK
+	SM_UPDATE
+	SM_PUBLISH
+)
+
+var smType2Name = map[int]string{
+	SM_INVITE:    "INVITE",
+	SM_ACK:       "ACK",
+	SM_CANCEL:    "CANCEL",
+	SM_BYE:       "BYE",
+	SM_REGISTER:  "REGISTER",
+	SM_OPTIONS:   "OPTIONS",
+	SM_SUBSCRIBE: "SUBSCRIBE",
+	SM_NOTIFY:    "NOTIFY",
+	SM_REFER:     "REFER",
+	SM_INFO:      "INFO",
+	SM_MESSAGE:   "MESSAGE",
+	SM_PRACK:     "PRACK",
+	SM_UPDATE:    "UPDATE",
+	SM_PUBLISH:   "PUBLISH",
+}
+
+var smName2Type = map[string]int{
+	"INVITE":    SM_INVITE,
+	"ACK":       SM_ACK,
+	"CANCEL":    SM_CANCEL,
+	"BYE":       SM_BYE,
+	"REGISTER":  SM_REGISTER,
+	"OPTIONS":   SM_OPTIONS,
+	"SUBSCRIBE": SM_SUBSCRIBE,
+	"NOTIFY":    SM_NOTIFY,
+	"REFER":     SM_REFER,
+	"INFO":      SM_INFO,
+	"MESSAGE":   SM_MESSAGE,
+	"PRACK":     SM_PRACK,
+	"UPDATE":    SM_UPDATE,
+	"PUBLISH":   SM_PUBLISH,
+}
+
+const (
 	HDR_ACCEPT             = iota // Accept ,
 	HDR_ACCEPTDISPOSITION         // Accept-Disposition
 	HDR_ACCEPTLANGUAGE            // Accept-Language ,
@@ -253,5 +304,8 @@ var hdrName2Type = map[string]int{
 }
 
 func GetHeaderType(hdr []byte) int {
-	return hdrName2Type[string(hdr)]
+	if t, ok := hdrName2Type[string(hdr)]; ok {
+		return t
+	}
+	return HDR_EOH
 }
